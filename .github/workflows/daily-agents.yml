@@ -2,7 +2,7 @@ name: Daily Agents Runner
 
 on:
   schedule:
-    - cron: '0 21 * * *'  # Runs daily at 6 PM ET
+    - cron: '0 21 * * *'  # Runs daily at 8 PM ET
   workflow_dispatch:       # Enables manual execution button in GitHub UI
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
           npx playwright install --with-deps chromium
 
       - name: Run Credit Card Agent
-        run: python card_agent.py
+        run: python credit_agent.py
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}

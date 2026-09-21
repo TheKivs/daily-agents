@@ -11,7 +11,7 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 TARGET_CARDS = [
     "American Express Platinum",
     "Capital One Venture X",
-    "American Express Delta SkyMiles® Gold Card",
+    "American Express Delta SkyMiles Gold Card",
     "Chase Sapphire Reserve"
 ]
 
