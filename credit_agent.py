@@ -105,7 +105,7 @@ def evaluate_offers_with_ai(raw_news: str) -> str:
     verdict = response.text.strip()
 
     if verdict != "NO_DEALS":
-        return f"{verdict}\n*Powered by Gemini/{MODEL.split("/")[1]}*\n"
+        return f"{verdict}\n*Powered by {MODEL}*\n"
     return f"No Deals on {date.today()}"
 
 def send_discord_alert(content: str):
