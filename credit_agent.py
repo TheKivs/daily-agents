@@ -55,7 +55,7 @@ def evaluate_offers_with_ai(raw_news: str) -> str:
     5. If no exceptional offers exist for a particular card, just don't print anything. If no exceptional offers exist for ANY of these cards, respond with EXACTLY 'NO_DEALS'. 
     """
 
-    chat = client.chats.create(model="gemini-3-flash-preview", tier="free")
+    chat = client.chats.create(model="gemini-3-flash-preview")
     response = chat.send_message(prompt)
 
     return response.text.strip()
