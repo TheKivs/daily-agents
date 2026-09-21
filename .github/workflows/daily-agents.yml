@@ -2,7 +2,7 @@ name: Daily Agents Runner
 
 on:
   schedule:
-    - cron: '0 23 * * *'  # Runs daily at 23:00 UTC (3:00 PM EST)  
+    - cron: '0 21 * * *'  # Runs daily at 6 PM ET
   workflow_dispatch:       # Enables manual execution button in GitHub UI
 
 jobs:

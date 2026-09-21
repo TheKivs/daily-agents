@@ -1,7 +1,8 @@
 import os
 import requests
-import feedparser  # pip install feedparser google-genai
+import feedparser 
 from google import genai
+from datetime import date
 
 # Configuration
 DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
@@ -10,7 +11,7 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 TARGET_CARDS = [
     "American Express Platinum",
     "Capital One Venture X",
-    "Amex Blue Cash Everyday",
+    "American Express Delta SkyMiles® Gold Card",
     "Chase Sapphire Reserve"
 ]
 
@@ -32,28 +33,29 @@ def evaluate_offers_with_ai(raw_news: str) -> str:
     client = genai.Client(api_key=GEMINI_API_KEY)
 
     prompt = f"""
-    Analyze the following credit card updates ONLY for these exact cards: {", ".join(TARGET_CARDS)}.
+    Analyze the following credit card offerings updates ONLY for these cards: {", ".join(TARGET_CARDS)}.
     Strictly ignore any offers for cards not in this list.
+    Ensure these are updated and relevant to the current date. 
 
-    RAW DATA:
+    RAW DATA: As of {date.today()}:
     {raw_news}
 
     INSTRUCTIONS:
-    1. Filter out routine perks. Include ONLY high-value deals (e.g., transfer bonuses, notable US travel deals, major dining credits). 
+    1. If card annual fees have changed, add that at the beginning.
+    2. Summarize high-value deals (e.g., airline/hotel transfer bonuses, notable hotels/travel deals, major dining credits). 
     No new cardholder offers needed.
-    2. Format EACH matching offer strictly using this template (no extra text or bullet points):
+    3. Format EACH matching offer strictly using this template (no extra text or bullet points):
     - Card: [Card Name]
     - Offer: [4-5 words]
     - Deal expires: [date, if available, else skip]
     - Detail: [1 line summary]
     - Offer quality: [A+, A, B+, B, B-, etc]
 
-    3. Separate multiple offers with a single blank line.
-    4. If no exceptional offers exist for a particular card, just don't print anything.
-    5. If no exceptional offers exist for ANY of these cards, respond with EXACTLY 'NO_DEALS'. 
+    4. Separate multiple offers with a single blank line.
+    5. If no exceptional offers exist for a particular card, just don't print anything. If no exceptional offers exist for ANY of these cards, respond with EXACTLY 'NO_DEALS'. 
     """
 
-    chat = client.chats.create(model="gemini-3-flash-preview")
+    chat = client.chats.create(model="gemini-3-flash-preview", tier="free")
     response = chat.send_message(prompt)
 
     return response.text.strip()
@@ -73,11 +75,8 @@ def send_discord_alert(content: str):
             )
 
 if __name__ == "__main__":
-    print("Fetching card news...")
+    print("Working on card data...")
     raw_data = fetch_latest_card_news()
-    print(f"DEBUG: Fetched raw news length: {len(raw_data)} chars")
-
-    print("Evaluating with AI...")
     ai_verdict = evaluate_offers_with_ai(raw_data)
     print(f"DEBUG AI Verdict:\n{ai_verdict}\n")
 
