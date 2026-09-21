@@ -12,7 +12,7 @@ TARGET_CARDS = [
     "American Express Platinum",
     "Capital One Venture X",
     "American Express Delta SkyMiles Gold Card",
-    "Chase Sapphire Reserve",
+    "Chase Sapphire Preferred",
     "Bank of America® Customized Cash Rewards",
     "Chase Freedom Unlimited",
     "American Express Blue Cash Everyday"
