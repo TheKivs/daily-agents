@@ -74,7 +74,7 @@ def fetch_gemini_model(client):
     # Explicit fallback if loop completes with no working models
     return None
 
-def evaluate_offers_with_ai(raw_news: str):
+def evaluate_offers_with_ai(raw_news: str) -> str:
     """Uses Gemini to filter and format card deals into a strict short layout."""
     client = genai.Client(api_key=GEMINI_API_KEY)
 
@@ -106,14 +106,14 @@ def evaluate_offers_with_ai(raw_news: str):
 
     if verdict != "NO_DEALS":
         return f"{verdict}\n*Powered by {MODEL}*\n"
-    return None
+    return "NO_DEALS"
 
 def send_discord_alert(content: str):
     if not DISCORD_WEBHOOK_URL:
         print("ERROR: DISCORD_WEBHOOK_URL environment variable is missing!")
         return
 
-    if content:
+    if content != "NO_DEALS":
         content = f"**Credit Card Offers AI Digest**\n\n{content}"
         response = requests.post(DISCORD_WEBHOOK_URL, json={"content": content})
         if response.status_code == 204:
