@@ -91,10 +91,10 @@ def evaluate_offers_with_ai(raw_news: str) -> str:
     2. Summarize medium or high-value deals (e.g., airline/hotel transfer bonuses, notable hotels/travel deals, major dining credits, shopping, etc.). Exclude new cardholder deals.
     3. Format EACH matching offer strictly using this template (no extra text or bullet points):
     - Card: [Card Name]
-    - Offer: [4-5 words]
-    - Deal expires: [date, if available, else skip]
-    - Detail: [1 line summary]
-    - Offer quality: [A+, A, B+, B, B-, etc]
+        - Offer: [4-5 words]
+        - Deal expires: [date, if available, else skip]
+        - Detail: [1 line summary]
+        - Offer quality: [A+, A, B+, B, B-, etc]
 
     4. Separate multiple offers with a single blank line.
     5. If no exceptional offers exist for a particular card, just don't print anything. If no exceptional offers exist for ANY of these cards, respond with EXACTLY 'NO_DEALS'. 
@@ -106,14 +106,15 @@ def evaluate_offers_with_ai(raw_news: str) -> str:
 
     if verdict != "NO_DEALS":
         return f"{verdict}\n*Powered by {MODEL}*\n"
-    return f"No Deals on {date.today()}"
+    return None
 
 def send_discord_alert(content: str):
     if not DISCORD_WEBHOOK_URL:
         print("ERROR: DISCORD_WEBHOOK_URL environment variable is missing!")
         return
 
-    if content != "NO_DEALS":
+    if content:
+        content = f"**Credit Card Offers AI Digest**\n\n{content}"
         response = requests.post(DISCORD_WEBHOOK_URL, json={"content": content})
         if response.status_code == 204:
             print("Successfully posted to Discord!")
@@ -127,5 +128,4 @@ if __name__ == "__main__":
     raw_data = fetch_latest_card_news()
     ai_verdict = evaluate_offers_with_ai(raw_data)
     print(f"DEBUG AI Verdict:\n{ai_verdict}\n")
-
-    send_discord_alert(f"🚀 **Credit Card Offers AI Digest**\n\n{ai_verdict}")
+    send_discord_alert(ai_verdict)
