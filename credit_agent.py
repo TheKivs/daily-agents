@@ -74,7 +74,7 @@ def fetch_gemini_model(client):
     # Explicit fallback if loop completes with no working models
     return None
 
-def evaluate_offers_with_ai(raw_news: str) -> str:
+def evaluate_offers_with_ai(raw_news: str):
     """Uses Gemini to filter and format card deals into a strict short layout."""
     client = genai.Client(api_key=GEMINI_API_KEY)
 
