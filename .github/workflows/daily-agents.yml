@@ -40,7 +40,7 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODELS: ${{ vars.GEMINI_MODELS }}  # optional repo variable, comma-separated; falls back to script default
-        run: python card_digest.py
+        run: python credit_agent.py
 
       - name: Commit seen.json
         if: success()
